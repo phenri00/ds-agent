@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/base64"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"github.com/docker/docker/api/types"
 	"github.com/docker/docker/api/types/filters"
@@ -24,7 +25,8 @@ func (c Configuration) updateService(w http.ResponseWriter, r *http.Request) {
 
 	err := json.NewDecoder(r.Body).Decode(&updateObject)
 	if err != nil {
-		panic(err)
+		log.Print("Failed parsing body.")
+		return
 	}
 
 	//TODO
@@ -37,7 +39,11 @@ func (c Configuration) updateService(w http.ResponseWriter, r *http.Request) {
 		panic(err)
 	}
 
-	services := findServiceInfo(serviceName)
+	services, err := findServiceInfo(serviceName)
+	if err != nil {
+		log.Print(err)
+		return
+	}
 
 	auth := getAuthConfig(c.RegistryUser, c.RegistryPassword)
 
@@ -52,7 +58,8 @@ func (c Configuration) updateService(w http.ResponseWriter, r *http.Request) {
 			EncodedRegistryAuth: auth,
 		})
 	if err != nil {
-		panic(err)
+		log.Print(err)
+		return
 	}
 
 	log.Print("INFO: ServiceUpdate, ", response)
@@ -60,7 +67,7 @@ func (c Configuration) updateService(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "OK")
 }
 
-func findServiceInfo(name string) []swarm.Service {
+func findServiceInfo(name string) ([]swarm.Service, error) {
 
 	cli, err := client.NewClientWithOpts(client.WithVersion("1.37"))
 	if err != nil {
@@ -74,13 +81,15 @@ func findServiceInfo(name string) []swarm.Service {
 		Filters: filters,
 	})
 	if err != nil {
-		panic(err)
-	}
-	if len(service) != 1 {
-		log.Print("Service not found.")
+		err := errors.New("Failed searching service")
+		return service, err
 	}
 
-	return service
+	if len(service) != 1 {
+		err := errors.New("Service not found.")
+		return service, err
+	}
+	return service, nil
 }
 
 func listServices(w http.ResponseWriter, r *http.Request) {
@@ -96,7 +105,7 @@ func listServices(w http.ResponseWriter, r *http.Request) {
 	}
 
 	for _, service := range services {
-		fmt.Fprintf(w, service.ID, service.Spec.Name, service.Spec.TaskTemplate.ContainerSpec.Image,
+		fmt.Fprintf(w, service.Spec.Name, service.Spec.TaskTemplate.ContainerSpec.Image,
 			service.Version.Index)
 	}
 }
