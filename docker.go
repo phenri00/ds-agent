@@ -29,8 +29,14 @@ func (c Configuration) updateService(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	//TODO
-	//Verify json/struct
+	if updateObject.Service == "" {
+		log.Print("Missing Service name")
+		return
+	} else if updateObject.Image == "" {
+		log.Print("Missing Image name")
+		return
+	}
+
 	serviceName := updateObject.Service
 	imageName := updateObject.Image
 
