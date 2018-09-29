@@ -11,7 +11,7 @@ Usage
 ---
 
 export DS_AGENT_REGISTRY_USERNAME=testuser  
-export DS_AGENT_REGISTRY_PASSWORD=test123<br>
+export DS_AGENT_REGISTRY_PASSWORD=test123   
 export DS_AGENT_PORT=3000  
 
 Update service:
