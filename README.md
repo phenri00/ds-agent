@@ -13,10 +13,11 @@ Usage
 export DS_AGENT_REGISTRY_USERNAME=testuser  
 export DS_AGENT_REGISTRY_PASSWORD=test123   
 export DS_AGENT_PORT=3000  
+export DS_AGENT_SECRET=pwd123
 
 Update service:
 
-curl -H "Content-Type: application/json" -X POST -d '{"service":"ubuntu_service","image":"httpd"}' http://localhost:3000/services/update
+curl -H "Content-Type: application/json" -X POST -d '{"secret":"pwd123", "service":"ubuntu_service","image":"httpd"}' http://localhost:3000/services/update
 
 List services:
 
