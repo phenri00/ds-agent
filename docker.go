@@ -42,7 +42,7 @@ func (c Configuration) updateService(w http.ResponseWriter, r *http.Request) {
 		panic(err)
 	}
 
-	services, err := findServiceInfo(updateObject.Service)
+	services, err := findService(updateObject.Service)
 	if err != nil {
 		log.Print(err)
 		return
@@ -70,7 +70,7 @@ func (c Configuration) updateService(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "OK")
 }
 
-func findServiceInfo(name string) ([]swarm.Service, error) {
+func findService(name string) ([]swarm.Service, error) {
 
 	cli, err := client.NewClientWithOpts(client.WithVersion("1.37"))
 	if err != nil {
@@ -95,7 +95,7 @@ func findServiceInfo(name string) ([]swarm.Service, error) {
 	return service, nil
 }
 
-func listServices(w http.ResponseWriter, r *http.Request) {
+func listServices(w http.ResponseWriter, r *http.Request) error {
 
 	cli, err := client.NewClientWithOpts(client.WithVersion("1.37"))
 	if err != nil {
