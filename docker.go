@@ -37,15 +37,12 @@ func (c Configuration) updateService(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	serviceName := updateObject.Service
-	imageName := updateObject.Image
-
 	cli, err := client.NewClientWithOpts(client.WithVersion("1.37"))
 	if err != nil {
 		panic(err)
 	}
 
-	services, err := findServiceInfo(serviceName)
+	services, err := findServiceInfo(updateObject.Service)
 	if err != nil {
 		log.Print(err)
 		return
@@ -53,7 +50,7 @@ func (c Configuration) updateService(w http.ResponseWriter, r *http.Request) {
 
 	auth := getAuthConfig(c.RegistryUser, c.RegistryPassword)
 
-	services[0].Spec.TaskTemplate.ContainerSpec.Image = imageName
+	services[0].Spec.TaskTemplate.ContainerSpec.Image = updateObject.Image
 
 	response, err := cli.ServiceUpdate(context.Background(),
 		services[0].ID,
