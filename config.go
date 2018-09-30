@@ -9,6 +9,7 @@ type Configuration struct {
 	Port             string
 	RegistryUser     string
 	RegistryPassword string
+	Secret           string
 }
 
 func getEnv() Configuration {
@@ -18,7 +19,7 @@ func getEnv() Configuration {
 	configuration.Port = checkEnv("DS_AGENT_PORT")
 	configuration.RegistryUser = checkEnv("DS_AGENT_REGISTRY_USERNAME")
 	configuration.RegistryPassword = checkEnv("DS_AGENT_REGISTRY_PASSWORD")
-
+	configuration.Secret = checkEnv("DS_AGENT_SECRET")
 	return configuration
 }
 

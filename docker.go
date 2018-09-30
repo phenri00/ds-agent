@@ -15,6 +15,7 @@ import (
 )
 
 type UpdateObject struct {
+	Secret  string
 	Service string
 	Image   string
 }
@@ -26,14 +27,21 @@ func (c Configuration) updateService(w http.ResponseWriter, r *http.Request) {
 	err := json.NewDecoder(r.Body).Decode(&updateObject)
 	if err != nil {
 		log.Print("Failed parsing body.")
+		http.Error(w, "Error", http.StatusInternalServerError)
 		return
 	}
 
 	if updateObject.Service == "" {
 		log.Print("Missing Service name")
+		http.Error(w, "Error", http.StatusInternalServerError)
 		return
 	} else if updateObject.Image == "" {
 		log.Print("Missing Image name")
+		http.Error(w, "Error", http.StatusInternalServerError)
+		return
+	} else if updateObject.Secret != c.Secret {
+		log.Print("Unauthorized")
+		http.Error(w, "Not Authorized", http.StatusUnauthorized)
 		return
 	}
 
@@ -45,6 +53,7 @@ func (c Configuration) updateService(w http.ResponseWriter, r *http.Request) {
 	services, err := findService(updateObject.Service)
 	if err != nil {
 		log.Print(err)
+		http.Error(w, "Error", http.StatusInternalServerError)
 		return
 	}
 
@@ -62,6 +71,7 @@ func (c Configuration) updateService(w http.ResponseWriter, r *http.Request) {
 		})
 	if err != nil {
 		log.Print(err)
+		http.Error(w, "Error", http.StatusInternalServerError)
 		return
 	}
 
