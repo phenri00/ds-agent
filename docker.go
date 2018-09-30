@@ -20,7 +20,7 @@ type UpdateObject struct {
 	Image   string
 }
 
-func (c Configuration) updateService(w http.ResponseWriter, r *http.Request) {
+func (c *Configuration) updateService(w http.ResponseWriter, r *http.Request) {
 
 	updateObject := UpdateObject{}
 
