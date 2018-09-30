@@ -103,8 +103,10 @@ func listServices(w http.ResponseWriter, r *http.Request) {
 	}
 
 	services, err := cli.ServiceList(context.Background(), types.ServiceListOptions{})
+
 	if err != nil {
-		panic(err)
+		err := errors.New("Failed searching service")
+		return service, err
 	}
 
 	for _, service := range services {
