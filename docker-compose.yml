@@ -1,11 +1,13 @@
+version: '3'
+
 services:
     ds-agent:
-        image: ds-agent:0.1.0
+        image: ds-agent:1.0.0
         environment:
-            DS_AGENT_PORT=3128
-            DS_AGENT_REGISTRY_USERNAME=testuser
-            DS_AGENT_REGISTRY_PASSWORD=test123
-            DS_AGENT_SECRET=pwd123
+            - DS_AGENT_PORT=3128
+            - DS_AGENT_REGISTRY_USERNAME=test
+            - DS_AGENT_REGISTRY_PASSWORD=test
+            - DS_AGENT_SECRET=pwd123
         ports:
             - 3128:3128
         volumes:
