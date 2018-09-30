@@ -2,7 +2,7 @@
 
 Overview
 ---
-A small agent written in Golang for handling image updates in Docker swarm mode services.
+A small agent written in Golang for handling image updates in Docker swarm mode services. Support for private registry with basic authentication(enabled as default).
 
 Build
 ---
