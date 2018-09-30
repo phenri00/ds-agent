@@ -95,7 +95,7 @@ func findService(name string) ([]swarm.Service, error) {
 	return service, nil
 }
 
-func listServices(w http.ResponseWriter, r *http.Request) error {
+func listServices(w http.ResponseWriter, r *http.Request) {
 
 	cli, err := client.NewClientWithOpts(client.WithVersion("1.37"))
 	if err != nil {
@@ -105,8 +105,7 @@ func listServices(w http.ResponseWriter, r *http.Request) error {
 	services, err := cli.ServiceList(context.Background(), types.ServiceListOptions{})
 
 	if err != nil {
-		err := errors.New("Failed listing services.")
-		return service, err
+		log.Print("Failed listing services.")
 	}
 
 	for _, service := range services {
