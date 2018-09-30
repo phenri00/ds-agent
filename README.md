@@ -4,8 +4,10 @@ Overview
 ---
 A small agent written in Golang for handling image updates in Docker swarm mode services.
 
-Why
+Build
 ---
+
+go build -o ds-agent main.go config.go docker.go
 
 Usage
 ---
