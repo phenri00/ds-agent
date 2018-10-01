@@ -18,7 +18,7 @@ export DS_AGENT_PORT=3000
 export DS_AGENT_SECRET=pwd123
 
 
-Https
+HTTPS
 ---
 
 Mount/copy your certificate and matching private key into:
