@@ -2,7 +2,7 @@
 
 Overview
 ---
-A small agent written in Golang for handling image updates in Docker swarm mode services. Support for private registry with basic authentication(enabled as default). Also run https as default.
+A small agent written in Golang for handling image updates in Docker swarm mode services. Support for private registry with basic authentication(enabled as default). Server also runs HTTPS as default.
 
 Build
 ---
@@ -18,13 +18,17 @@ export DS_AGENT_PORT=3000
 export DS_AGENT_SECRET=pwd123
 
 
-Https
+HTTPS
 ---
 
 Mount/copy your certificate and matching private key into:
 
-/root/crt.pem
+/root/crt.pem  
 /root/key.pem
+
+Docker
+---
+Dockerfile and docker-compose.yml is included.
 
 Usage
 ---
