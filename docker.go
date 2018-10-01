@@ -125,8 +125,6 @@ func listServices(w http.ResponseWriter, r *http.Request) {
 
 	var srvObj []ServiceObject
 
-	w.Header().Set("Content-Type", "application/json")
-
 	for _, service := range services {
 		srvObj = append(srvObj, ServiceObject{
 			Servicename: service.Spec.Name,
@@ -134,6 +132,7 @@ func listServices(w http.ResponseWriter, r *http.Request) {
 		})
 
 	}
+	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(srvObj)
 }
 
