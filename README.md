@@ -27,9 +27,7 @@ HTTPS
 
 If TLS is enabled you need your certificate and matching private key in pem format. Put these in same folder as the app.
 
-The Docker way:   
-
-Mount or copy following file.      
+Using docker? Copy/mount into following:   
 
 /root/crt.pem  
 /root/key.pem
