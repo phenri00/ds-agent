@@ -26,6 +26,10 @@ Mount/copy your certificate and matching private key into:
 /root/crt.pem  
 /root/key.pem
 
+Docker
+---
+Dockerfile and docker-compose.yml is included.
+
 Usage
 ---
 
