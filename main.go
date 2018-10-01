@@ -20,6 +20,4 @@ func main() {
 		log.Print("WARNING: TLS disabled")
 		log.Fatal(http.ListenAndServe(":"+envs.Port, nil))
 	}
-
-	log.Fatal(http.ListenAndServe(":"+envs.Port, nil))
 }
