@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 	"os"
+	"strconv"
 )
 
 type Configuration struct {
@@ -10,6 +11,7 @@ type Configuration struct {
 	RegistryUser     string
 	RegistryPassword string
 	Secret           string
+	Tls              bool
 }
 
 func getEnv() Configuration {
@@ -20,6 +22,7 @@ func getEnv() Configuration {
 	configuration.RegistryUser = checkEnv("DS_AGENT_REGISTRY_USERNAME")
 	configuration.RegistryPassword = checkEnv("DS_AGENT_REGISTRY_PASSWORD")
 	configuration.Secret = checkEnv("DS_AGENT_SECRET")
+	configuration.Tls, _ = strconv.ParseBool(os.Getenv("DS_AGENT_TLS")) //optional
 	return configuration
 }
 
