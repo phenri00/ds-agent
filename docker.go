@@ -119,8 +119,7 @@ func listServices(w http.ResponseWriter, r *http.Request) {
 	}
 
 	for _, service := range services {
-		fmt.Fprintf(w, service.Spec.Name, service.Spec.TaskTemplate.ContainerSpec.Image,
-			service.Version.Index)
+		fmt.Fprintf(w, "name: %q, image %q\n", service.Spec.Name, service.Spec.TaskTemplate.ContainerSpec.Image)
 	}
 }
 
