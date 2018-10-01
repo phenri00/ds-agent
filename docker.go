@@ -20,6 +20,11 @@ type UpdateObject struct {
 	Image   string
 }
 
+type ServiceObject struct {
+	Servicename string
+	Image       string
+}
+
 func (c Configuration) updateService(w http.ResponseWriter, r *http.Request) {
 
 	updateObject := UpdateObject{}
@@ -118,9 +123,18 @@ func listServices(w http.ResponseWriter, r *http.Request) {
 		log.Print("Failed listing services.")
 	}
 
+	var srvObj []ServiceObject
+
+	w.Header().Set("Content-Type", "application/json")
+
 	for _, service := range services {
-		fmt.Fprintf(w, "name: %q, image %q\n", service.Spec.Name, service.Spec.TaskTemplate.ContainerSpec.Image)
+		srvObj = append(srvObj, ServiceObject{
+			Servicename: service.Spec.Name,
+			Image:       service.Spec.TaskTemplate.ContainerSpec.Image,
+		})
+
 	}
+	json.NewEncoder(w).Encode(srvObj)
 }
 
 func getAuthConfig(userName string, password string) string {
