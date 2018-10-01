@@ -19,7 +19,7 @@ export DS_AGENT_SECRET=pwd123
 
 Optional:
 
-DS_AGENT_TLS=true|false
+export DS_AGENT_TLS=true|false
 
 
 HTTPS
