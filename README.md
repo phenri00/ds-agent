@@ -34,7 +34,7 @@ Using docker? Copy/mount into following:
 
 Docker
 ---
-Dockerfile and docker-compose.yml is included.
+Dockerfile and docker-compose.yml are included.
 
 Usage
 ---
