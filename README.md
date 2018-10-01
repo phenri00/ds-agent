@@ -25,7 +25,11 @@ export DS_AGENT_TLS=true|false
 HTTPS
 ---
 
-If TLS is enabled you need to mount/copy your certificate and matching private key into:
+If TLS is enabled you need your certificate and matching private key in pem format. Put these in same folder as the app.
+
+The Docker way:   
+
+Mount or copy following file.      
 
 /root/crt.pem  
 /root/key.pem
