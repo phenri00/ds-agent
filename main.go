@@ -8,9 +8,9 @@ import (
 func main() {
 
 	envs := getEnv()
-	http.HandleFunc("/services", listServices)
+	http.HandleFunc("/services", envs.listServices)
 	http.HandleFunc("/services/update", envs.updateService)
-	log.Print("Server listning at port: ", envs.Port)
+	log.Print("INFO: Server listning at port: ", envs.Port)
 
 	switch envs.Tls {
 	case true:
