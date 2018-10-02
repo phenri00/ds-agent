@@ -23,14 +23,14 @@ type UpdateServiceObject struct {
 type ServiceListObject struct {
 	Servicename string
 	Image       string
-	Secret      string
+	Secret      string `json:",omitempty"`
 }
 
 type ContainerListObject struct {
 	Name   []string
 	Image  string
 	Status string
-	Secret string
+	Secret string `json:",omitempty"`
 }
 
 func (c Configuration) updateService(w http.ResponseWriter, r *http.Request) {
@@ -188,7 +188,7 @@ func (c Configuration) listContainers(w http.ResponseWriter, r *http.Request) {
 		})
 	}
 	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(containerObj)
+	json.NewEncoder(w).Encode(containerListObj)
 
 }
 
