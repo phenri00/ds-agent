@@ -50,16 +50,6 @@ func (c Configuration) updateService(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if updateServiceObject.Service == "" {
-		log.Print("ERROR: Missing Service name")
-		http.Error(w, "Error", http.StatusInternalServerError)
-		return
-	} else if updateServiceObject.Image == "" {
-		log.Print("ERROR: Missing Image name")
-		http.Error(w, "Error", http.StatusInternalServerError)
-		return
-	}
-
 	cli, err := client.NewClientWithOpts(client.WithVersion("1.37"))
 	if err != nil {
 		panic(err)
