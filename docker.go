@@ -45,7 +45,7 @@ func (c Configuration) updateService(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if auth(updateServiceObject.Secret, c.Secret) == false {
-		log.Print("ERROR: Unauthorized")
+		log.Print("ERROR: Unauthorized, RemoteAddr: ", r.RemoteAddr)
 		http.Error(w, "Not Authorized", http.StatusUnauthorized)
 		return
 	}
