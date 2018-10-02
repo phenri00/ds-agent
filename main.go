@@ -8,6 +8,7 @@ import (
 func main() {
 
 	envs := getEnv()
+	http.HandleFunc("/containers", envs.listContainers)
 	http.HandleFunc("/services", envs.listServices)
 	http.HandleFunc("/services/update", envs.updateService)
 	log.Print("INFO: Server listning at port: ", envs.Port)

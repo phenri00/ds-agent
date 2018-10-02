@@ -25,6 +25,12 @@ type ServiceListObject struct {
 	Image       string
 }
 
+type ContainerObject struct {
+	Name   []string
+	Image  string
+	Status string
+}
+
 type AuthObject struct {
 	Secret string
 }
@@ -169,6 +175,32 @@ func (c Configuration) listServices(w http.ResponseWriter, r *http.Request) {
 	}
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(serviceListObject)
+}
+
+func (c Configuration) listContainers(w http.ResponseWriter, r *http.Request) {
+
+	cli, err := client.NewClientWithOpts(client.WithVersion("1.37"))
+	if err != nil {
+		panic(err)
+	}
+
+	containers, err := cli.ContainerList(context.Background(), types.ContainerListOptions{})
+	if err != nil {
+		panic(err)
+	}
+
+	var containerObject []ContainerObject
+
+	for _, container := range containers {
+		containerObject = append(containerObject, ContainerObject{
+			Name:   container.Names,
+			Image:  container.Image,
+			Status: container.Status,
+		})
+	}
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(containerObject)
+
 }
 
 func auth(reqSecret string, envSecret string) bool {
