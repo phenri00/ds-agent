@@ -10,7 +10,6 @@ import (
 	"github.com/docker/docker/api/types/filters"
 	"github.com/docker/docker/api/types/swarm"
 	"github.com/docker/docker/client"
-	"io/ioutil"
 	"log"
 	"net/http"
 )
@@ -18,49 +17,34 @@ import (
 type UpdateServiceObject struct {
 	Service string
 	Image   string
+	Secret  string
 }
 
 type ServiceListObject struct {
 	Servicename string
 	Image       string
+	Secret      string
 }
 
 type ContainerObject struct {
 	Name   []string
 	Image  string
 	Status string
-}
-
-type AuthObject struct {
 	Secret string
 }
 
 func (c Configuration) updateService(w http.ResponseWriter, r *http.Request) {
 
-	//Need to reuse request body.
-	bodyBytes, err := ioutil.ReadAll(r.Body)
+	updateServiceObject := UpdateServiceObject{}
+
+	err := json.NewDecoder(r.Body).Decode(&updateServiceObject)
 	if err != nil {
-		log.Print("ERROR: Failed parsing body")
+		log.Print("Failed parsing body.")
 		http.Error(w, "Error", http.StatusInternalServerError)
 		return
 	}
 
-	authObject := AuthObject{}
-	updateServiceObject := UpdateServiceObject{}
-
-	err = json.Unmarshal(bodyBytes, &authObject)
-	if err != nil {
-		log.Print("ERROR: Failed unmarshal")
-		return
-	}
-
-	err = json.Unmarshal(bodyBytes, &updateServiceObject)
-	if err != nil {
-		log.Print("ERROR: Failed unmarshal")
-		return
-	}
-
-	if auth(authObject.Secret, c.Secret) == false {
+	if auth(updateServiceObject.Secret, c.Secret) == false {
 		log.Print("ERROR: Unauthorized")
 		http.Error(w, "Not Authorized", http.StatusUnauthorized)
 		return
@@ -138,16 +122,16 @@ func findService(name string) ([]swarm.Service, error) {
 
 func (c Configuration) listServices(w http.ResponseWriter, r *http.Request) {
 
-	authObject := AuthObject{}
+	serviceListObject := ServiceListObject{}
 
-	err := json.NewDecoder(r.Body).Decode(&authObject)
+	err := json.NewDecoder(r.Body).Decode(&serviceListObject)
 	if err != nil {
 		log.Print("Failed parsing body.")
 		http.Error(w, "Error", http.StatusInternalServerError)
 		return
 	}
 
-	if auth(authObject.Secret, c.Secret) == false {
+	if auth(serviceListObject.Secret, c.Secret) == false {
 		log.Print("ERROR: Unauthorized")
 		http.Error(w, "Not Authorized", http.StatusUnauthorized)
 		return
@@ -164,20 +148,35 @@ func (c Configuration) listServices(w http.ResponseWriter, r *http.Request) {
 		log.Print("ERROR: Failed listing services")
 	}
 
-	var serviceListObject []ServiceListObject
+	var serviceList []ServiceListObject
 
 	for _, service := range services {
-		serviceListObject = append(serviceListObject, ServiceListObject{
+		serviceList = append(serviceList, ServiceListObject{
 			Servicename: service.Spec.Name,
 			Image:       service.Spec.TaskTemplate.ContainerSpec.Image,
 		})
 
 	}
 	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(serviceListObject)
+	json.NewEncoder(w).Encode(serviceList)
 }
 
 func (c Configuration) listContainers(w http.ResponseWriter, r *http.Request) {
+
+	containerObject := ContainerObject{}
+
+	err := json.NewDecoder(r.Body).Decode(&containerObject)
+	if err != nil {
+		log.Print("Failed parsing body.")
+		http.Error(w, "Error", http.StatusInternalServerError)
+		return
+	}
+
+	if auth(containerObject.Secret, c.Secret) == false {
+		log.Print("ERROR: Unauthorized")
+		http.Error(w, "Not Authorized", http.StatusUnauthorized)
+		return
+	}
 
 	cli, err := client.NewClientWithOpts(client.WithVersion("1.37"))
 	if err != nil {
@@ -189,17 +188,17 @@ func (c Configuration) listContainers(w http.ResponseWriter, r *http.Request) {
 		panic(err)
 	}
 
-	var containerObject []ContainerObject
+	var containerObj []ContainerObject
 
 	for _, container := range containers {
-		containerObject = append(containerObject, ContainerObject{
+		containerObj = append(containerObj, ContainerObject{
 			Name:   container.Names,
 			Image:  container.Image,
 			Status: container.Status,
 		})
 	}
 	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(containerObject)
+	json.NewEncoder(w).Encode(containerObj)
 
 }
 
