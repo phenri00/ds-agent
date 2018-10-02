@@ -45,4 +45,8 @@ curl -H "Content-Type: application/json" -X POST -d '{"secret":"pwd123", "servic
 
 List services:
 
-curl https://server.example.com:3000/services
+curl -H "Content-Type: application/json" -X POST -d '{"secret":"pwd123"} ttps://se ver.example.com:3000/services
+
+List containers:
+
+curl -H "Content-Type: application/json" -X POST -d '{"secret":"pwd123"} ttps://se ver.example.com:3000/containers
