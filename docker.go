@@ -26,7 +26,7 @@ type ServiceListObject struct {
 	Secret      string
 }
 
-type ContainerObject struct {
+type ContainerListObject struct {
 	Name   []string
 	Image  string
 	Status string
@@ -153,16 +153,16 @@ func (c Configuration) listServices(w http.ResponseWriter, r *http.Request) {
 
 func (c Configuration) listContainers(w http.ResponseWriter, r *http.Request) {
 
-	containerObject := ContainerObject{}
+	containerListObject := ContainerListObject{}
 
-	err := json.NewDecoder(r.Body).Decode(&containerObject)
+	err := json.NewDecoder(r.Body).Decode(&containerListObject)
 	if err != nil {
 		log.Print("Failed parsing body.")
 		http.Error(w, "Error", http.StatusInternalServerError)
 		return
 	}
 
-	if auth(containerObject.Secret, c.Secret) == false {
+	if auth(containerListObject.Secret, c.Secret) == false {
 		log.Print("ERROR: Unauthorized")
 		http.Error(w, "Not Authorized", http.StatusUnauthorized)
 		return
@@ -178,10 +178,10 @@ func (c Configuration) listContainers(w http.ResponseWriter, r *http.Request) {
 		panic(err)
 	}
 
-	var containerObj []ContainerObject
+	var containerListObj []ContainerListObject
 
 	for _, container := range containers {
-		containerObj = append(containerObj, ContainerObject{
+		containerListObj = append(containerListObj, ContainerListObject{
 			Name:   container.Names,
 			Image:  container.Image,
 			Status: container.Status,
