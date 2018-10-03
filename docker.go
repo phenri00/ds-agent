@@ -15,22 +15,22 @@ import (
 )
 
 type UpdateServiceObject struct {
-	Service string
-	Image   string
-	Secret  string
+	Service string `json:"service"`
+	Image   string `json:"image"`
+	Secret  string `json:",omitempty"`
 }
 
 type ServiceListObject struct {
-	Servicename string
-	Image       string
+	Servicename string `json:"servicename"`
+	Image       string `json:"image"`
 	Secret      string `json:",omitempty"`
 }
 
 type ContainerListObject struct {
-	Name   []string
-	Image  string
-	Status string
-	Secret string `json:",omitempty"`
+	Name   []string `json:"name"`
+	Image  string   `json:"image"`
+	Status string   `json:"status"`
+	Secret string   `json:",omitempty"`
 }
 
 func (c Configuration) updateService(w http.ResponseWriter, r *http.Request) {
