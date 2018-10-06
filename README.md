@@ -14,7 +14,7 @@ Usage
 
 export DS_AGENT_REGISTRY_USERNAME=testuser  
 export DS_AGENT_REGISTRY_PASSWORD=test123   
-export DS_AGENT_PORT=3000  
+export DS_AGENT_PORT=9000  
 export DS_AGENT_SECRET=pwd123
 
 Optional:
@@ -41,7 +41,7 @@ Usage
 
 Update service:
 
-curl -H "Content-type: application/json" -H "X-Auth:test123" -X POST -d '{"service":"nginx","image":"nginx"}'  https://example.com:9000/services/update
+curl -H "Content-type: application/json" -H "X-Auth:test123" -X POST -d '{"service":"my_nginx_service","image":"nginx"}'  https://example.com:9000/services/update
 
 List services:
 
