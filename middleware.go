@@ -14,6 +14,6 @@ func middleWareAuth(secret string, h http.HandlerFunc) http.HandlerFunc {
 			return
 		}
 		h(w, r)
-		log.Println("After")
+		log.Println("Auth OK.")
 	}
 }
