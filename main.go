@@ -8,9 +8,9 @@ import (
 func main() {
 
 	envs := getEnv()
-	http.HandleFunc("/containers", envs.listContainers)
-	http.HandleFunc("/services", envs.listServices)
-	http.HandleFunc("/services/update", envs.updateService)
+	http.HandleFunc("/containers", middleWareAuth(envs.Secret, envs.listContainers))
+	http.HandleFunc("/services", middleWareAuth(envs.Secret, envs.listServices))
+	http.HandleFunc("/services/update", middleWareAuth(envs.Secret, envs.updateService))
 	log.Print("INFO: Server listning at port: ", envs.Port)
 
 	switch envs.Tls {

@@ -17,20 +17,17 @@ import (
 type UpdateServiceObject struct {
 	Service string `json:"service"`
 	Image   string `json:"image"`
-	Secret  string `json:",omitempty"`
 }
 
 type ServiceListObject struct {
 	Servicename string `json:"servicename"`
 	Image       string `json:"image"`
-	Secret      string `json:",omitempty"`
 }
 
 type ContainerListObject struct {
 	Name   []string `json:"name"`
 	Image  string   `json:"image"`
 	Status string   `json:"status"`
-	Secret string   `json:",omitempty"`
 }
 
 func (c Configuration) updateService(w http.ResponseWriter, r *http.Request) {
@@ -41,12 +38,6 @@ func (c Configuration) updateService(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Print("Failed parsing body.")
 		http.Error(w, "Error", http.StatusInternalServerError)
-		return
-	}
-
-	if auth(updateServiceObject.Secret, c.Secret) == false {
-		log.Print("ERROR: Unauthorized, RemoteAddr: ", r.RemoteAddr)
-		http.Error(w, "Not Authorized", http.StatusUnauthorized)
 		return
 	}
 
@@ -112,21 +103,6 @@ func findService(name string) ([]swarm.Service, error) {
 
 func (c Configuration) listServices(w http.ResponseWriter, r *http.Request) {
 
-	serviceListObject := ServiceListObject{}
-
-	err := json.NewDecoder(r.Body).Decode(&serviceListObject)
-	if err != nil {
-		log.Print("Failed parsing body.")
-		http.Error(w, "Error", http.StatusInternalServerError)
-		return
-	}
-
-	if auth(serviceListObject.Secret, c.Secret) == false {
-		log.Print("ERROR: Unauthorized")
-		http.Error(w, "Not Authorized", http.StatusUnauthorized)
-		return
-	}
-
 	cli, err := client.NewClientWithOpts(client.WithVersion("1.37"))
 	if err != nil {
 		panic(err)
@@ -153,21 +129,6 @@ func (c Configuration) listServices(w http.ResponseWriter, r *http.Request) {
 
 func (c Configuration) listContainers(w http.ResponseWriter, r *http.Request) {
 
-	containerListObject := ContainerListObject{}
-
-	err := json.NewDecoder(r.Body).Decode(&containerListObject)
-	if err != nil {
-		log.Print("Failed parsing body.")
-		http.Error(w, "Error", http.StatusInternalServerError)
-		return
-	}
-
-	if auth(containerListObject.Secret, c.Secret) == false {
-		log.Print("ERROR: Unauthorized")
-		http.Error(w, "Not Authorized", http.StatusUnauthorized)
-		return
-	}
-
 	cli, err := client.NewClientWithOpts(client.WithVersion("1.37"))
 	if err != nil {
 		panic(err)
@@ -192,10 +153,7 @@ func (c Configuration) listContainers(w http.ResponseWriter, r *http.Request) {
 
 }
 
-func auth(reqSecret string, envSecret string) bool {
-	return reqSecret == envSecret
-}
-
+// func generating auth string for registry
 func getAuthConfig(userName string, password string) string {
 	authConfig := types.AuthConfig{
 		Username: userName,
