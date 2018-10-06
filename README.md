@@ -25,7 +25,7 @@ export DS_AGENT_TLS=true|false
 HTTPS
 ---
 
-If TLS is enabled you need your certificate and matching private key in pem format. Put these in same folder as the app.
+If TLS is enabled then you will need your certificate and matching private key in pem format. Put these in same folder as the app.
 
 Using docker? Copy/mount into following:   
 
