@@ -8,6 +8,7 @@ services:
             - DS_AGENT_REGISTRY_USERNAME=test
             - DS_AGENT_REGISTRY_PASSWORD=test
             - DS_AGENT_SECRET=pwd123
+            - DS_AGENT_TLS=false
         ports:
             - 3128:3128
         volumes:
