@@ -41,12 +41,12 @@ Usage
 
 Update service:
 
-curl -H "Content-Type: application/json" -X POST -d '{"secret":"pwd123", "service":"ubuntu_service","image":"httpd"}' https://server.example.com:3000/services/update
+curl -H "Content-type: application/json" -H "X-Auth:test123" -X POST -d '{"service":"nginx","image":"nginx"}'  https://example.com:9000/services/update
 
 List services:
 
-curl -H "Content-Type: application/json" -X POST -d '{"secret":"pwd123"} https://server.example.com:3000/services
+curl -H "Content-Type: application/json" -H "X-Auth:test123"  https://example.com:9000/services
 
 List containers:
 
-curl -H "Content-Type: application/json" -X POST -d '{"secret":"pwd123"} https://server.example.com:3000/containers
+curl -H "Content-Type: application/json" -H "X-Auth:test123"  https://example.com:9000/containers
