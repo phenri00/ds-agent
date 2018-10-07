@@ -15,7 +15,7 @@ func middleWareAuth(secret string, h http.HandlerFunc) http.HandlerFunc {
 			http.Error(w, "Not Authorized", http.StatusUnauthorized)
 			return
 		}
-		h(w, r)
 		log.Println("Auth OK.")
+		h(w, r)
 	}
 }
