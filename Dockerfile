@@ -1,7 +1,6 @@
 FROM golang:1.11 as builder
-RUN mkdir /build 
-ADD . /build/
 WORKDIR /build 
+ADD . /build/
 RUN go get -d -v ./...
 RUN GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build -o ds-agent
 
