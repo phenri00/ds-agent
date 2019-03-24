@@ -21,6 +21,17 @@ Optional:
 
 export DS_AGENT_TLS=true|false
 
+Update service:
+
+curl -H "Content-type: application/json" -H "X-Auth:pwd123" -X POST -d '{"service":"my_nginx_service","image":"nginx"}'  https://example.com:9000/services/update
+
+List services:
+
+curl -H "Content-Type: application/json" -H "X-Auth:pwd123"  https://example.com:9000/services
+
+List containers:
+
+curl -H "Content-Type: application/json" -H "X-Auth:pwd123"  https://example.com:9000/containers
 
 HTTPS
 ---
@@ -36,17 +47,3 @@ Docker
 ---
 Dockerfile and docker-compose.yml are included.
 
-Usage
----
-
-Update service:
-
-curl -H "Content-type: application/json" -H "X-Auth:pwd123" -X POST -d '{"service":"my_nginx_service","image":"nginx"}'  https://example.com:9000/services/update
-
-List services:
-
-curl -H "Content-Type: application/json" -H "X-Auth:pwd123"  https://example.com:9000/services
-
-List containers:
-
-curl -H "Content-Type: application/json" -H "X-Auth:pwd123"  https://example.com:9000/containers
